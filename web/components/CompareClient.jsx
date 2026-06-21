@@ -136,29 +136,29 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
     <div className="flex flex-col flex-1 min-h-0">
       {/* Search context bar */}
       {contextSummary && (
-        <div className="bg-dark-green px-5 py-3.5 flex items-center gap-3 border-b border-mid-green flex-shrink-0">
+        <div className="context-bar bg-dark-green px-3 sm:px-5 py-3 sm:py-3.5 flex items-center gap-2 border-b border-mid-green flex-shrink-0">
           <Link
             href="/"
-            className="text-text-light border border-mid-green rounded-[6px] px-[11px] py-[5px] text-[12px] no-underline hover:text-cream"
+            className="text-text-light border border-mid-green rounded-[6px] px-[10px] py-[4px] text-[12px] no-underline hover:text-cream flex-shrink-0"
           >
             ← Back
           </Link>
-          <div className="text-cream text-[14px] font-medium">
-            <span>{contextSummary}</span>
+          <div className="text-cream text-[13px] font-medium truncate min-w-0 flex-1">
+            {contextSummary}
           </div>
           <Link
             href="/"
-            className="ml-auto text-text-light border border-mid-green rounded-[6px] px-[10px] py-1 text-[11px] no-underline hover:text-cream"
+            className="text-text-light border border-mid-green rounded-[6px] px-[10px] py-[4px] text-[11px] no-underline hover:text-cream flex-shrink-0"
           >
-            Edit search
+            Edit
           </Link>
         </div>
       )}
 
       {/* Search + filter bar */}
-      <div className="bg-cream border-b border-border px-3 sm:px-5 py-2 flex-shrink-0">
-        {/* Row 1: search input */}
-        <div className="flex items-center bg-white border border-border rounded-[8px] px-3 gap-2 mb-2">
+      <div className="filter-bar bg-cream border-b border-border px-3 sm:px-5 py-2 flex-shrink-0 flex flex-col sm:flex-row gap-2 sm:items-center">
+        {/* Search input */}
+        <div className="filter-search flex items-center bg-white border border-border rounded-[8px] px-3 gap-2 sm:flex-1">
           <span className="text-text-light text-[15px]">⌕</span>
           <input
             value={search}
@@ -168,8 +168,8 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
           />
         </div>
 
-        {/* Row 2: chips + sort + count */}
-        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
+        {/* Chips + sort + count */}
+        <div className="filter-chips-row flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar flex-shrink-0">
           {HOST_FILTERS.map(({ value, label }) => (
             <button
               key={value}
