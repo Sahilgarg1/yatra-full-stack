@@ -20,10 +20,10 @@ const SORT_OPTIONS = [
   { value: "duration_asc", label: "Shortest first" },
 ];
 
-function Skeleton() {
+function Skeleton({ count }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 p-4">
-      {[0, 1, 2, 3, 4, 5].map((i) => (
+      {Array.from({ length: count }).map((_, i) => (
         <div key={i} className="bg-cream border border-border rounded-[13px] overflow-hidden animate-pulse">
           <div className="h-[110px] bg-border" />
           <div className="p-3.5 space-y-2">
@@ -52,13 +52,34 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [detailTrip, setDetailTrip] = useState(null);
   const [sortOpen, setSortOpen] = useState(false);
+  const [limit, setLimit] = useState(18);
 
   const timer = useRef(null);
+
+  // Adjust card count to match column count per screen size
+  useEffect(() => {
+    function getLimit() {
+      const w = window.innerWidth;
+      if (w < 640) return 6;   // 1 col → 6 cards
+      if (w < 1024) return 12; // 2 col → 12 cards
+      return 18;               // 3 col → 18 cards
+    }
+    setLimit(getLimit());
+    const handler = () => {
+      const next = getLimit();
+      setLimit((prev) => {
+        if (prev !== next) setPage(1);
+        return next;
+      });
+    };
+    window.addEventListener("resize", handler);
+    return () => window.removeEventListener("resize", handler);
+  }, []);
 
   const loadTrips = useCallback(async () => {
     setLoading(true);
     try {
-      const params = new URLSearchParams({ sort, page, limit: 18 });
+      const params = new URLSearchParams({ sort, page, limit });
       if (search) params.set("q", search);
       if (hostFilter) params.set("host_type", hostFilter);
       const apiBase = process.env.NEXT_PUBLIC_API_URL || "";
@@ -71,7 +92,7 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
     } finally {
       setLoading(false);
     }
-  }, [search, hostFilter, sort, page]);
+  }, [search, hostFilter, sort, page, limit]);
 
   useEffect(() => {
     clearTimeout(timer.current);
@@ -112,7 +133,7 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
   const currentSort = SORT_OPTIONS.find((o) => o.value === sort)?.label || "Sort";
 
   return (
-    <div className="flex flex-col h-screen overflow-hidden">
+    <div className="flex flex-col flex-1 min-h-0">
       {/* Search context bar */}
       {contextSummary && (
         <div className="bg-dark-green px-5 py-3.5 flex items-center gap-3 border-b border-mid-green flex-shrink-0">
@@ -197,9 +218,9 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
       </div>
 
       {/* Cards area */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain">
         {loading ? (
-          <Skeleton />
+          <Skeleton count={limit} />
         ) : trips.length === 0 ? (
           <div className="flex flex-col items-center py-20">
             <div className="text-[32px] text-text-light mb-3">◎</div>

@@ -12,7 +12,7 @@ export default async function ComparePage({ searchParams }) {
   const days = params?.days || "";
 
   return (
-    <div className="flex flex-col h-screen">
+    <div className="flex flex-col h-[100dvh]">
       <NavBar />
       <CompareClient initialQ={q} initialDate={date} initialDays={days} />
     </div>
