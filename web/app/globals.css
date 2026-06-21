@@ -43,3 +43,11 @@ body {
 input[type="month"]::-webkit-calendar-picker-indicator {
   filter: invert(1) opacity(0.5);
 }
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}

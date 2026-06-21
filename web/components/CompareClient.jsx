@@ -22,7 +22,7 @@ const SORT_OPTIONS = [
 
 function Skeleton() {
   return (
-    <div className="grid grid-cols-3 gap-3.5 p-4">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 p-4">
       {[0, 1, 2, 3, 4, 5].map((i) => (
         <div key={i} className="bg-cream border border-border rounded-[13px] overflow-hidden animate-pulse">
           <div className="h-[110px] bg-border" />
@@ -61,7 +61,8 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
       const params = new URLSearchParams({ sort, page, limit: 18 });
       if (search) params.set("q", search);
       if (hostFilter) params.set("host_type", hostFilter);
-      const res = await fetch(`/api/trips?${params}`);
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || "";
+      const res = await fetch(`${apiBase}/trips?${params}`);
       const data = await res.json();
       setTrips(data.trips || []);
       setPagination(data.pagination);
@@ -134,9 +135,9 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
       )}
 
       {/* Search + filter bar */}
-      <div className="bg-cream border-b border-border px-5 py-2.5 flex items-center gap-2 flex-wrap flex-shrink-0">
-        {/* Search input */}
-        <div className="flex items-center bg-white border border-border rounded-[8px] px-3 gap-2 flex-1 min-w-[200px]">
+      <div className="bg-cream border-b border-border px-3 sm:px-5 py-2 flex-shrink-0">
+        {/* Row 1: search input */}
+        <div className="flex items-center bg-white border border-border rounded-[8px] px-3 gap-2 mb-2">
           <span className="text-text-light text-[15px]">⌕</span>
           <input
             value={search}
@@ -146,13 +147,13 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
           />
         </div>
 
-        {/* Host filter chips */}
-        <div className="flex gap-1.5 flex-wrap">
+        {/* Row 2: chips + sort + count */}
+        <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
           {HOST_FILTERS.map(({ value, label }) => (
             <button
               key={value}
               onClick={() => { setHostFilter(value); setPage(1); }}
-              className={`px-[11px] py-[5px] rounded-[6px] text-[12px] font-medium border cursor-pointer ${
+              className={`px-[10px] py-[4px] rounded-[6px] text-[12px] font-medium border cursor-pointer whitespace-nowrap flex-shrink-0 ${
                 hostFilter === value
                   ? "bg-dark-green border-dark-green text-cream"
                   : "bg-white border-border text-text-secondary hover:border-green"
@@ -161,39 +162,38 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
               {label}
             </button>
           ))}
+
+          <div className="w-px h-[16px] bg-border flex-shrink-0 mx-0.5" />
+
+          {/* Sort picker */}
+          <div className="relative flex-shrink-0">
+            <button
+              onClick={() => setSortOpen(!sortOpen)}
+              className="px-[10px] py-[4px] rounded-[6px] text-[12px] font-medium border border-border bg-white text-text-secondary cursor-pointer whitespace-nowrap"
+            >
+              {currentSort} ▾
+            </button>
+            {sortOpen && (
+              <div className="absolute left-0 top-8 bg-white border border-border rounded-[8px] shadow-md z-50 py-1 min-w-[160px]">
+                {SORT_OPTIONS.map((o) => (
+                  <button
+                    key={o.value}
+                    onClick={() => { setSort(o.value); setSortOpen(false); setPage(1); }}
+                    className={`w-full text-left px-4 py-2.5 text-[13px] cursor-pointer border-none bg-transparent ${
+                      sort === o.value ? "font-bold text-dark-green bg-beige" : "text-text-secondary hover:bg-beige/50"
+                    }`}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <span className="text-[11px] text-text-light ml-auto flex-shrink-0 pl-1">
+            {pagination?.total ?? "…"} trips
+          </span>
         </div>
-
-        <div className="w-px h-[18px] bg-border" />
-
-        {/* Sort picker */}
-        <div className="relative">
-          <button
-            onClick={() => setSortOpen(!sortOpen)}
-            className="px-[11px] py-[5px] rounded-[6px] text-[12px] font-medium border border-border bg-white text-text-secondary cursor-pointer"
-          >
-            {currentSort} ▾
-          </button>
-          {sortOpen && (
-            <div className="absolute right-0 top-9 bg-white border border-border rounded-[8px] shadow-md z-50 py-1 min-w-[160px]">
-              {SORT_OPTIONS.map((o) => (
-                <button
-                  key={o.value}
-                  onClick={() => { setSort(o.value); setSortOpen(false); setPage(1); }}
-                  className={`w-full text-left px-4 py-2.5 text-[13px] cursor-pointer border-none bg-transparent ${
-                    sort === o.value ? "font-bold text-dark-green bg-beige" : "text-text-secondary hover:bg-beige/50"
-                  }`}
-                >
-                  {o.label}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Result count */}
-        <span className="text-[12px] text-text-light ml-auto">
-          {pagination?.total ?? "…"} trips found
-        </span>
       </div>
 
       {/* Cards area */}
@@ -208,7 +208,7 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-3 gap-3.5 p-4 pb-2">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3.5 p-4 pb-2">
               {trips.map((trip) => (
                 <TripCard
                   key={trip.id}
@@ -248,40 +248,41 @@ export default function CompareClient({ initialQ, initialDate, initialDays }) {
 
       {/* Compare bar */}
       {selectedTrips.length > 0 && (
-        <div className="bg-dark-green border-t border-mid-green px-5 py-3 flex items-center gap-2.5 flex-shrink-0">
-          <div className="flex gap-2 flex-1">
+        <div className="bg-dark-green border-t border-mid-green px-3 sm:px-5 py-2.5 flex items-center gap-2 flex-shrink-0">
+          <div className="flex gap-1.5 flex-1 overflow-x-auto no-scrollbar">
             {selectedTrips.map((t) => (
               <div
                 key={t.id}
-                className="bg-mid-green border border-dashed border-green rounded-[8px] px-3 py-[7px] min-w-[120px] flex items-center justify-between gap-1.5"
+                className="bg-mid-green border border-dashed border-green rounded-[8px] px-2.5 py-[6px] min-w-[100px] flex items-center justify-between gap-1 flex-shrink-0"
               >
-                <span className="text-cream text-[12px] font-medium truncate max-w-[90px]">
+                <span className="text-cream text-[11px] font-medium truncate max-w-[72px]">
                   {t.title}
                 </span>
                 <button
                   onClick={() => setSelectedTrips((p) => p.filter((x) => x.id !== t.id))}
-                  className="text-text-muted text-[14px] bg-transparent border-none cursor-pointer"
+                  className="text-text-muted text-[14px] bg-transparent border-none cursor-pointer leading-none"
                 >
                   ×
                 </button>
               </div>
             ))}
             {selectedTrips.length < 4 && (
-              <div className="bg-mid-green border border-dashed border-mid-green rounded-[8px] px-3 py-[7px] min-w-[120px]">
-                <span className="text-green text-[12px]">+ add trip</span>
+              <div className="bg-mid-green border border-dashed border-mid-green rounded-[8px] px-2.5 py-[6px] min-w-[80px] flex-shrink-0">
+                <span className="text-green text-[11px]">+ add trip</span>
               </div>
             )}
           </div>
           {selectedTrips.length >= 2 && (
             <button
               onClick={() => setDrawerOpen(true)}
-              className="bg-gold text-dark-green border-none rounded-[8px] px-[18px] py-[9px] text-[13px] font-bold cursor-pointer whitespace-nowrap"
+              className="bg-gold text-dark-green border-none rounded-[8px] px-3 sm:px-[18px] py-[8px] text-[12px] sm:text-[13px] font-bold cursor-pointer whitespace-nowrap flex-shrink-0"
             >
-              Compare side by side →
+              <span className="sm:hidden">Compare →</span>
+              <span className="hidden sm:inline">Compare side by side →</span>
             </button>
           )}
           {selectedTrips.length === 1 && (
-            <span className="text-text-muted text-[11px] whitespace-nowrap">Select 1 more to compare</span>
+            <span className="text-text-muted text-[11px] whitespace-nowrap flex-shrink-0">+1 more</span>
           )}
         </div>
       )}

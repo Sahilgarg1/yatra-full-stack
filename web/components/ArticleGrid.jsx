@@ -50,11 +50,11 @@ const ARTICLES = [
 
 export default function ArticleGrid() {
   return (
-    <div className="grid grid-cols-2 gap-3.5 mb-12">
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 mb-12">
       {ARTICLES.map((a) => (
         <article
           key={a.id}
-          className={`bg-cream border border-border rounded-[14px] overflow-hidden cursor-pointer hover:border-green transition-colors${a.featured ? " col-span-2" : ""}`}
+          className={`bg-cream border border-border rounded-[14px] overflow-hidden cursor-pointer hover:border-green transition-colors${a.featured ? " sm:col-span-2" : ""}`}
         >
           <div
             className={`relative ${a.featured ? "h-[160px]" : "h-[110px]"}`}

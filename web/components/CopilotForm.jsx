@@ -19,7 +19,8 @@ export default function CopilotForm() {
   async function handleSubmit(e) {
     e.preventDefault();
     try {
-      await fetch("/api/enquiries", {
+      const apiBase = process.env.NEXT_PUBLIC_API_URL || "";
+      await fetch(`${apiBase}/enquiries`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

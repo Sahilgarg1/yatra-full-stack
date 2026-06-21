@@ -13,8 +13,8 @@ const INCLUSIONS = ["stay", "meals", "transport", "guide", "permit", "equipment"
 
 export default function CompareDrawer({ trips, onClose, onRemove }) {
   return (
-    <div className="bg-dark-green border-t border-mid-green flex-shrink-0 overflow-x-auto">
-      <div className="px-5 py-3 flex items-center justify-between border-b border-mid-green">
+    <div className="fixed inset-0 z-50 flex flex-col bg-dark-green sm:relative sm:inset-auto sm:border-t sm:border-mid-green sm:flex-shrink-0">
+      <div className="px-5 py-3 flex items-center justify-between border-b border-mid-green flex-shrink-0">
         <span className="text-gold font-display font-bold text-[14px]">Side-by-side comparison</span>
         <button
           onClick={onClose}
@@ -23,8 +23,8 @@ export default function CompareDrawer({ trips, onClose, onRemove }) {
           Close ×
         </button>
       </div>
-      <div className="overflow-x-auto pb-2">
-        <table className="border-collapse w-full" style={{ minWidth: Math.max(600, trips.length * 200 + 120) }}>
+      <div className="overflow-auto flex-1 pb-2">
+        <table className="border-collapse w-full" style={{ minWidth: Math.max(480, trips.length * 160 + 100) }}>
           {/* Trip names row */}
           <tbody>
             <tr>

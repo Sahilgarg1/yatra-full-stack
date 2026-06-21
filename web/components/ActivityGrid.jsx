@@ -21,7 +21,7 @@ export default function ActivityGrid() {
   const router = useRouter();
 
   return (
-    <div className="grid grid-cols-6 gap-2.5 mb-12">
+    <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-2.5 mb-12">
       {ACTIVITIES.map((a) => (
         <button
           key={a.name}

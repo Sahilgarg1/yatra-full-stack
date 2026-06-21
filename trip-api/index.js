@@ -63,26 +63,37 @@ app.use(errorHandler);
 
 // ─── Start ────────────────────────────────────────────────────────────────────
 
-async function start() {
-  try {
-    await ping();
-    console.log("✓ Database connected");
-    await initEnquiries();
-    console.log("✓ Enquiries table ready");
-    app.listen(PORT, () => {
-      console.log(`✓ API running on http://localhost:${PORT}`);
-      console.log(`  GET  /trips              — list & filter trips`);
-      console.log(`  GET  /trips/filters      — available filter options`);
-      console.log(`  GET  /trips/:id          — single trip detail`);
-      console.log(`  GET  /trips/:id/related  — related trips`);
-      console.log(`  POST /enquiries          — submit enquiry`);
-      console.log(`  GET  /health             — health check`);
-      console.log(`  GET  /stats              — platform stats`);
-    });
-  } catch (err) {
-    console.error("Failed to start:", err.message);
-    process.exit(1);
+// In serverless (Vercel) environments, init the enquiries table lazily on first request
+let _ready = false;
+app.use(async (req, res, next) => {
+  if (!_ready) {
+    try {
+      await initEnquiries();
+      _ready = true;
+    } catch (err) {
+      console.error("Enquiries init error:", err.message);
+    }
   }
+  next();
+});
+
+if (process.env.VERCEL !== "1") {
+  async function start() {
+    try {
+      await ping();
+      console.log("✓ Database connected");
+      await initEnquiries();
+      _ready = true;
+      console.log("✓ Enquiries table ready");
+      app.listen(PORT, () => {
+        console.log(`✓ API running on http://localhost:${PORT}`);
+      });
+    } catch (err) {
+      console.error("Failed to start:", err.message);
+      process.exit(1);
+    }
+  }
+  start();
 }
 
-start();
+module.exports = app;

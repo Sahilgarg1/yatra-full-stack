@@ -54,17 +54,17 @@ export default function CopilotPage() {
       <NavBar variant="copilot" />
 
       {/* Hero */}
-      <div className="bg-dark-green px-8 pt-[52px] pb-16">
+      <div className="bg-dark-green px-4 sm:px-8 pt-[52px] pb-16">
         <div className="max-w-[580px] mx-auto">
           <div className="inline-flex items-center gap-1.5 bg-mid-green border border-green rounded-full px-3 py-1 text-green text-[11px] font-semibold tracking-[0.05em] uppercase mb-4">
             ✦ Guardian Angel — for foreign travelers
           </div>
-          <h1 className="font-display text-cream text-[34px] font-bold leading-[1.2] mb-3">
+          <h1 className="font-display text-cream text-[26px] sm:text-[34px] font-bold leading-[1.2] mb-3">
             Your personal{" "}
             <em className="text-gold not-italic">local expert</em>,<br />
             on call across India.
           </h1>
-          <p className="text-text-light text-[14px] leading-[1.65] max-w-[440px]">
+          <p className="text-text-light text-[13px] sm:text-[14px] leading-[1.65] max-w-[440px]">
             India is incredible — and genuinely complex. Permits, UPI payments, last-minute route
             changes, operator disputes. We put a trusted local co-pilot in your WhatsApp, available
             whenever you need them.
@@ -73,7 +73,7 @@ export default function CopilotPage() {
       </div>
 
       {/* Main */}
-      <main className="max-w-[580px] mx-auto px-8 pt-10 pb-16 w-full">
+      <main className="max-w-[580px] mx-auto px-4 sm:px-8 pt-10 pb-16 w-full">
         {/* Feature cards */}
         <div className="flex flex-col gap-3 mb-9">
           {FEATURES.map((f) => (

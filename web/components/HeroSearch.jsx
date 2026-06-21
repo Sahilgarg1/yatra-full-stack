@@ -20,7 +20,7 @@ export default function HeroSearch() {
 
   return (
     <form onSubmit={handleSearch} className="bg-mid-green rounded-2xl p-5 mt-9">
-      <div className="grid gap-2.5 mb-3" style={{ gridTemplateColumns: "2fr 1fr 1fr" }}>
+      <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr_1fr] gap-2.5 mb-3">
         <div className="flex flex-col gap-1.5">
           <label className="text-text-light text-[10px] font-semibold tracking-[0.07em] uppercase pl-0.5">
             Where do you want to go?
