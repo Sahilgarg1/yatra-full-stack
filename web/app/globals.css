@@ -1,0 +1,45 @@
+@import "tailwindcss";
+
+@theme {
+  --color-dark-green: #1A2B1F;
+  --color-mid-green: #2D4A35;
+  --color-green: #4A7C59;
+  --color-gold: #F5A623;
+  --color-cream: #FAFAF7;
+  --color-beige: #F5F2EE;
+  --color-border: #E8E0D4;
+  --color-border-dark: #E0D4C0;
+  --color-beige-dark: #162218;
+  --color-beige-warm: #F0E6D3;
+  --color-text-primary: #1A2B1F;
+  --color-text-secondary: #374151;
+  --color-text-muted: #6B7280;
+  --color-text-light: #9CA3AF;
+  --color-red: #B94040;
+  --color-red-light: #E24B4A;
+  --color-red-bg: #FCEBEB;
+  --color-orange: #C4762A;
+  --color-purple: #7B5EA7;
+  --color-whatsapp: #25D366;
+  --color-agency-bg: #E1F5EE;
+  --color-agency-text: #085041;
+  --color-influencer-bg: #EEEDFE;
+  --color-influencer-text: #3C3489;
+  --color-local-bg: #FAEEDA;
+  --color-local-text: #633806;
+}
+
+@theme inline {
+  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-sans: var(--font-inter), system-ui, sans-serif;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: #F5F2EE;
+  color: #1A2B1F;
+}
+
+input[type="month"]::-webkit-calendar-picker-indicator {
+  filter: invert(1) opacity(0.5);
+}

@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "Yatra",
+    "slug": "yatra",
+    "version": "1.0.0",
+    "scheme": "yatra",
+    "platforms": [
+      "ios",
+      "android",
+      "web"
+    ],
+    "newArchEnabled": true,
+    "ios": {
+      "bundleIdentifier": "com.yatra.tripcomparison"
+    },
+    "android": {
+      "package": "com.yatra.tripcomparison"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-font",
+      "expo-asset"
+    ]
+  }
+}
